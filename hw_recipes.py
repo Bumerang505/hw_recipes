@@ -31,30 +31,9 @@ def get_list_names_dishes():
 
 def get_dishes_ingredients():
     lst = []
-    # [['Яйцо | 2 | шт', 'Молоко | 100 | мл', 'Помидор | 2 | шт'],
-    #  ['Утка | 1 | шт', 'Вода | 2 | л', 'Мед | 3 | ст.л', 'Соевый соус | 60 | мл'],
-    #  ['Картофель | 1 | кг', 'Чеснок | 3 | зубч', 'Сыр гауда | 100 | г'],
-    #  ['Говядина | 500 | г', 'Перец сладкий | 1 | шт', 'Лаваш | 2 | шт', 'Винный уксус | 1 | ст.л', 'Помидор | 2 | шт']]
-
     lst_sep = []
-    # [['Яйцо | 2 | шт'], ['Молоко | 100 | мл'], ['Помидор | 2 | шт'], ['Утка | 1 | шт'], ['Вода | 2 | л'],
-    #  ['Мед | 3 | ст.л'], ['Соевый соус | 60 | мл'], ['Картофель | 1 | кг'], ['Чеснок | 3 | зубч'],
-    #  ['Сыр гауда | 100 | г'], ['Говядина | 500 | г'], ['Перец сладкий | 1 | шт'], ['Лаваш | 2 | шт'],
-    #  ['Винный уксус | 1 | ст.л'], ['Помидор | 2 | шт']]
-
     lst_sep_stick = []
-    # [['Яйцо ', ' 2 ', ' шт'], ['Молоко ', ' 100 ', ' мл'], ['Помидор ', ' 2 ', ' шт'], ['Утка ', ' 1 ', ' шт'],
-    #  ['Вода ', ' 2 ', ' л'], ['Мед ', ' 3 ', ' ст.л'], ['Соевый соус ', ' 60 ', ' мл'], ['Картофель ', ' 1 ', ' кг'],
-    #  ['Чеснок ', ' 3 ', ' зубч'], ['Сыр гауда ', ' 100 ', ' г'], ['Говядина ', ' 500 ', ' г'],
-    #  ['Перец сладкий ', ' 1 ', ' шт'], ['Лаваш ', ' 2 ', ' шт'], ['Винный уксус ', ' 1 ', ' ст.л'],
-    #  ['Помидор ', ' 2 ', ' шт']]
-
     lst_strip = []
-    # ['Яйцо', '2', 'шт', 'Молоко', '100', 'мл', 'Помидор', '2', 'шт', 'Утка', '1', 'шт', 'Вода', '2', 'л', 'Мед', '3',
-    #  'ст.л', 'Соевый соус', '60', 'мл', 'Картофель', '1', 'кг', 'Чеснок', '3', 'зубч', 'Сыр гауда', '100', 'г',
-    #  'Говядина', '500', 'г', 'Перец сладкий', '1', 'шт', 'Лаваш', '2', 'шт', 'Винный уксус', '1', 'ст.л', 'Помидор',
-    #  '2', 'шт']
-    lst_fin = []
     for i in create_all_elements_list():
         lst.append(i[2:])
 
@@ -106,5 +85,34 @@ def final_list_ingredients():
 
 cook_book = dict(zip(get_list_names_dishes(), final_list_ingredients()))
 
+
+def find_double_ingredients(list_ingred_double, name):
+    dict_ing = {}
+
+    for n in list_ingred_double:
+        dict_ing[n] = 0
+
+    for k in list_ingred_double:
+        dict_ing[k] += 1
+    return dict_ing[name]
+
+
+def get_shop_list_by_dishes(dishes, person_count):
+    list_ingred_double = []
+    person_dishes = {}
+    for i in dishes:
+        for key in cook_book:
+            if i == key:
+                for n in cook_book[key]:
+                    list_ingred_double.append(n['ingredient_name'])
+                    for s in list_ingred_double:
+                        double = find_double_ingredients(list_ingred_double, s)
+                        person_dishes[n['ingredient_name']] = \
+                            {f'measure': n['measure'], 'quantity': (int(n['quantity']) * person_count * double)}
+
+    return person_dishes
+
+
+print(get_shop_list_by_dishes(['Фахитос', 'Омлет'], 2))
 
 
