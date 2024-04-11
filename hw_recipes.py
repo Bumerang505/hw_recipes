@@ -1,9 +1,7 @@
 def create_all_elements_list():
     list_dish = []
-    count_iteration = 0
     with open('recipes.txt', encoding='utf-8') as f:
         list_from_string = [line.strip() for line in f]
-        names_dishes = list_from_string[count_iteration]
         list_with_slash = []
         for i in list_from_string:
             if i != '':
